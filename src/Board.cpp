@@ -9,7 +9,7 @@ void Board::clearBoard()
 {
 }
 
-void Board::printBoard() const
+void Board::printMap() const
 {
 	int i, j;
 
@@ -23,6 +23,12 @@ void Board::printBoard() const
 	}
 
 	std::cout << "====================================="<< std::endl;
+}
+
+void Board::buildMap()
+{
+
+
 }
 
 void Board::getRow(const char& c)

@@ -7,8 +7,8 @@ class Board {
 public:
 
 	void clearBoard();
-	void printBoard()const;
-	
+	void printMap() const;
+	void buildMap();
 	void getRow(const char& c);
 	void getMap();
 	

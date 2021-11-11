@@ -7,16 +7,22 @@ public:
 
 	void start();
 
-	/*void switchPlayer();
+	//void switchPlayer();
 
-	void nextMove();
+	//void nextMove();
 
-	void nextLevel();*/
+	//void nextLevel();
 
-	void end();
+	//void end();
 
 private:
 
-	bool m_running = true;
+	void buildBoard();
+
+	bool gameOver() const;
+	
+	void startPlay();
+
+	//bool m_running = true;
 
 };

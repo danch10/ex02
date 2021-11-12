@@ -12,7 +12,6 @@ public:
 	void buildMap(FileHandler& file);
 	void getMap(char c, int x, int y);
 
-
 private:
 
 	std::vector<std::vector<char>> m_map;

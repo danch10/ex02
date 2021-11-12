@@ -19,10 +19,6 @@ int main()
 	file.openFile();
 	
 	file.readBoard();
-
-	//board.clearBoard();
-
-	board.printBoard();
  
 	return EXIT_SUCCESS;
 }

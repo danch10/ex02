@@ -4,6 +4,7 @@
 #include "Board.h"
 #include "macros.h"
 #include "Characters.h"
+#include "Tiles.h"
 #include <vector>
 
 bool FileHandler::openFile()
@@ -24,6 +25,7 @@ Board FileHandler::readBoard()
 { 
 	Board board;
 	Characters chr;
+	Tiles tile;
 	char c;
 	int i = 0, j = 0;
 	bool firstDone = false ;
@@ -44,7 +46,7 @@ Board FileHandler::readBoard()
 
 		if ((c == '*') || (c == '#') || (c == 'F') || (c == '!'))
 		{
-
+			tile.getTiles(i, j, c);
 		}
 		else if ((c == 'K') || (c == 'T') || (c == 'M') || (c == 'W'))
 		{

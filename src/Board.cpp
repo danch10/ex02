@@ -43,8 +43,6 @@ void Board::printMap() const
 void Board::buildMap(FileHandler& file)
 {
 	file.readBoard();
-
-
 }
 
 

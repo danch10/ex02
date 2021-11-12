@@ -6,18 +6,15 @@ class Board {
 
 public:
 
+	Board();
 	void clearBoard();
 	void printMap() const;
-	void buildMap();
-	void getRow(const char& c);
-	void getMap();
-	
+	void buildMap(FileHandler& file);
+	void getMap(char c, int x, int y);
+
 
 private:
 
 	std::vector<std::vector<char>> m_map;
-
-	std::vector<char> m_row;
-
 
 };

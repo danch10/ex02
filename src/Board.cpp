@@ -5,9 +5,24 @@
 #include "FileHandler.h"
 
 
+Board::Board()
+{
+	for (int i = 0; i < MAX_ROW; i++)
+	{
+		std::vector<char> temp;
+
+		for (int j = 0; j < MAX_COL; j++)
+			temp.push_back(' ');
+
+		m_map.push_back(temp);
+	}
+}
+
 void Board::clearBoard()
 {
+
 }
+
 
 void Board::printMap() const
 {
@@ -25,29 +40,15 @@ void Board::printMap() const
 	std::cout << "====================================="<< std::endl;
 }
 
-void Board::buildMap()
+void Board::buildMap(FileHandler& file)
 {
+	file.readBoard();
 
 
 }
 
-void Board::getRow(const char& c)
-{
-	std::cout << c;
 
-	if (c == '\n')
-	{
-		Board b;
-		b.getMap();
-		m_row.clear();
-	}
-	else
-		m_row.push_back(c);
-}
-
-void Board::getMap()
+void Board::getMap(char c, int x, int y)
 {
-	for (int i = 0; i < m_row.size(); i++)
-		std::cout << m_row[i];
-	m_map.push_back(m_row);
+	m_map[x][y] = c ;
 }

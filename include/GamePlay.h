@@ -23,6 +23,4 @@ private:
 	
 	void startPlay();
 
-	//bool m_running = true;
-
 };

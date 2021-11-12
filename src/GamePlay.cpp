@@ -15,20 +15,7 @@ void gamePlay::start()
 			
 	}
 
-	//FileHandler gameFile ;
-	//Board gameBorad ;
-
-	////gameFile.openFile();
-
-
-	//gameBorad.printBoard();
-
-	//m_running = false;
-
-	//while (!m_running)
-	//{
-	//	end();
-	//}
+	
 
 }
 
@@ -39,21 +26,23 @@ void gamePlay::buildBoard()
 	
 	file.openFile();
 
-	board.buildMap();
+	board.buildMap(file);
 
 	board.printMap();
+}
+
+void gamePlay::startPlay()
+{
+
+
 }
 
 bool gamePlay::gameOver() const
 {
 
+
 	return false;
 }
-
-void gamePlay::startPlay()
-{
-}
-
 
 
 

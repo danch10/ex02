@@ -21,21 +21,18 @@ bool FileHandler::openFile()
 }
 
 
-Board FileHandler::readBoard() 
+void FileHandler::readBoard(Board& board, Characters& chr, Tiles& tile)
 { 
-	Board board;
-	Characters chr;
-	Tiles tile;
 	char c;
+	
 	int i = 0, j = 0;
+	
 	bool firstDone = false ;
+
 	while (m_ifs.good())
 	{
 
 		c = m_ifs.get();
-
-		/*if ((c == '@') || (c == ' ') || (c == 'X') || (c == '='))
-			board.getMap(c, i, j);*/
 
 		if (c == '\n')
 		{
@@ -47,6 +44,7 @@ Board FileHandler::readBoard()
 		if ((c == '*') || (c == '#') || (c == 'F') || (c == '!'))
 		{
 			tile.getTiles(i, j, c);
+			c = ' ';
 		}
 		else if ((c == 'K') || (c == 'T') || (c == 'M') || (c == 'W'))
 		{
@@ -54,12 +52,10 @@ Board FileHandler::readBoard()
 				chr.getFirst(c, i, j);
 			else
 				chr.listCharacters(c, i, j);
+		
+			c = ' ';
 		}
-
 			board.getMap(c, i, j);
-
 	}
 	chr.closeList();
-
-	return board;
 }

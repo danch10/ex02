@@ -7,7 +7,7 @@ public:
 
 	bool openFile();
 
-	Board readBoard();
+	void readBoard(Board& board, Characters& chr, Tiles& tile);
 
 
 private:

@@ -9,16 +9,10 @@
 
 int main()
 {
-	/*gamePlay play;
+	gamePlay play;
 
-	play.start;*/
+	play.start();
 
-	Board board;
-	FileHandler file;
-	
-	file.openFile();
-	
-	file.readBoard();
- 
+
 	return EXIT_SUCCESS;
 }

@@ -3,7 +3,8 @@
 #include "macros.h"
 #include "Board.h"
 #include "FileHandler.h"
-
+#include "Characters.h"
+#include "Tiles.h"
 
 Board::Board()
 {
@@ -40,7 +41,8 @@ void Board::printMap() const
 	std::cout << "====================================="<< std::endl;
 }
 
-void Board::buildMap(FileHandler& file)
+void Board::buildMap(FileHandler& file,
+						Characters character, Tiles tile)
 {
 	file.readBoard();
 }
@@ -49,4 +51,13 @@ void Board::buildMap(FileHandler& file)
 void Board::getMap(char c, int x, int y)
 {
 	m_map[x][y] = c ;
+}
+
+char Board::mapCell(const int i, const int j)
+{
+	char c;
+
+	c = m_map[i][j];
+
+	return c;
 }

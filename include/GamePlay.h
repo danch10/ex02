@@ -17,10 +17,21 @@ public:
 
 private:
 
-	void buildBoard();
+	void buildBoard( FileHandler& file, Board board, Characters character, Tiles tile);
 
 	bool gameOver() const;
 	
-	void startPlay();
+	void printCharcterAndLevel();
 
+	void startPlay(Characters& character, const Board board);
+
+	void goRight(Characters& character, const Board board);
+
+	void goLeft(Characters& character, const Board board);
+
+	void goUp(Characters& character, const Board board);
+
+	void goDown(Characters& character, const Board board);
 };
+
+

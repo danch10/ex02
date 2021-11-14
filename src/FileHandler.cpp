@@ -1,11 +1,9 @@
 #include <iostream>
-#include <fstream>
+#include "macros.h"
 #include "FileHandler.h"
 #include "Board.h"
-#include "macros.h"
 #include "Characters.h"
 #include "Tiles.h"
-#include <vector>
 
 bool FileHandler::openFile()
 {
@@ -20,42 +18,77 @@ bool FileHandler::openFile()
 	   return true;
 }
 
+void FileHandler::readFromFile()
+{
+	
+}
+//m_ifs.good()
 
-void FileHandler::readBoard(Board& board, Characters& chr, Tiles& tile)
-{ 
+Board FileHandler::readBoard()
+{
+	Board staticMap;
 	char c;
-	
-	int i = 0, j = 0;
-	
-	bool firstDone = false ;
 
-	while (m_ifs.good())
+	for (int i = 0; i < MAX_ROW; i++)
 	{
-
-		c = m_ifs.get();
-
-		if (c == '\n')
+		for (int j = 0; j < MAX_COL; j++)
 		{
-			j++;
-			i = 0;
-			continue;
+				c = m_ifs.get();
+
+				if (!(c == '=') && !(c == '@') && !(c == ' ') && !(c == 'X'))
+					c = ' ';
+
+			staticMap.getStaticMap(c, i, j);
 		}
+	}
+	
+	return staticMap;
+}
 
-		if ((c == '*') || (c == '#') || (c == 'F') || (c == '!'))
+Characters FileHandler::readCharacters()
+{
+	Characters chr;
+	bool firstCharacter = true;
+	char c;
+
+	for (int i = 0; i < MAX_ROW; i++)
+	{
+		for (int j = 0; j < MAX_COL; j++)
 		{
-			tile.getTiles(i, j, c);
-			c = ' ';
-		}
-		else if ((c == 'K') || (c == 'T') || (c == 'M') || (c == 'W'))
-		{
-			if (!firstDone)
+			c = m_ifs.get();
+
+			if (!(c == 'K') && !(c == 'W') && !(c == 'T') && !(c == 'M'))
+				continue;
+
+			if (firstCharacter)
+			{
 				chr.getFirst(c, i, j);
-			else
-				chr.listCharacters(c, i, j);
-		
-			c = ' ';
+			}
+
+			chr.listCharacters(c, i, j);
 		}
-			board.getMap(c, i, j);
 	}
 	chr.closeList();
+
+	return chr;
+}
+
+Tiles FileHandler::readTiles()
+{
+	Tiles tile;
+	char c;
+
+	for (int i = 0; i < MAX_ROW; i++)
+	{
+		for (int j = 0; j < MAX_COL; j++)
+		{
+			c = m_ifs.get();
+
+			if (!(c == 'F') && !(c == '!') && !(c == '#') && !(c == '*'))
+				continue;
+
+			tile.getTiles(c, i, j);
+		}
+	}
+	return tile;
 }

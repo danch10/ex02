@@ -16,13 +16,19 @@ public:
 	void listCharacters(int x, int y, char c);
 	void closeList();
 	void switchCharacter();
-	void move(Board board, const int i, const int j);
-	bool checkValidation(Board board, const int i, const int j);
+	void move(const int i, const int j);
+	void relocate(const int i, const int j);
+	bool checkValidation(const char c);
+	Board insertCharacters(Board& board);
 
 private:
+
+	bool KValidation();
+	bool WValidation();
+	bool TingValidation();
+	bool MingValidation();
 
 	Node* m_head;
 	Node* m_tail;
 	bool m_key = false;
-
 };

@@ -11,27 +11,19 @@ public:
 
 	//void nextMove();
 
-	//void nextLevel();
-
-	//void end();
+	void endGame();
 
 private:
 
-	void buildBoard( FileHandler& file, Board board, Characters character, Tiles tile);
+	void buildBoard(FileHandler& file, Board& board, Characters& character, Tiles& tile);
 
 	bool gameOver() const;
-	
-	void printCharcterAndLevel();
 
-	void startPlay(Characters& character, const Board board);
+	void startPlay(Characters& chr);
 
-	void goRight(Characters& character, const Board board);
+	void go(Characters& player, const int i, const int j);
 
-	void goLeft(Characters& character, const Board board);
 
-	void goUp(Characters& character, const Board board);
 
-	void goDown(Characters& character, const Board board);
 };
-
 

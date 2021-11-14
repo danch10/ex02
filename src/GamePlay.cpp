@@ -1,7 +1,6 @@
 #include <iostream>
-#include <cstdlib> // for std::system()
+#include <cstdlib> 
 #include <conio.h>
-#include <Windows.h>
 #include "GamePlay.h"
 #include "FileHandler.h"
 #include "Board.h"
@@ -31,60 +30,81 @@ void gamePlay::start()
 
 	for(int level = 1 ; level <= 3 ; level++ )
 
-	while (! gameOver())
+	while (1)
 	{
 		buildBoard(file, board, character, tile);
 
-		startPlay(character, board);
-	
+		startPlay(character);
+
+		/*checkPlay();*/
+
+
+	}
+
+}
+
+void gamePlay::buildBoard(FileHandler& file, Board& board, Characters& character, Tiles& tile)
+{	
+	if(file.openFile())
+	{
+		board = file.readBoard();
 		
+		character = file.readCharacters();
+
+		tile = file.readTiles();
+
+		board = tile.insertTiles(board);
+
+		board = character.insertCharacters(board);
+
+		board.printMap();
 	}
 }
 
-void gamePlay::buildBoard(FileHandler& file, Board board, Characters character, Tiles tile)
-{	
-	file.openFile();
 
-	board.buildMap(file, character, tile);
-
-	board.printMap();
-}
-
-
-void gamePlay::startPlay( Characters& character, const Board board)
+void gamePlay::startPlay( Characters& chr)
 {
 	bool validMove = false;
+	int row ;
+	int col ;
+
 
 	while (!validMove)
 	{
 		auto c = _getch();
+
 		switch (c)
 		{
 		case KB_Up:
-			goUp(character);
+			row = 1;
+			col = 0;
+			go(chr, row, col);
 			break;
 
 		case KB_Down:
-			goDown(character);
+			row = -1;
+			col = 0;
+			go(chr, row, col);
 			break;
 
 		case KB_Left:
-			goLeft(character);
+			row = 0;
+			col = -1;
+			go(chr, row, col);
 			break;
 
 		case KB_Right:
-			goRight(character);
+			row = 0;
+			col = 1;
+			go(chr, row, col);
 			break;
 
 		case 'p':
-			character.switchCharacter();
+			chr.switchCharacter();
 			break;
 		
 		case KB_Escape:
-			
-			gamePlay play;
-			play.gameOver();
-			break;
+			endGame();
 
 		default:
 			std::cout << "press a valid key to move\n";
@@ -93,42 +113,18 @@ void gamePlay::startPlay( Characters& character, const Board board)
 	}
 }
 
-void gamePlay::printCharcterAndLevel()
-{
-}
-
 bool gamePlay::gameOver() const
 {
 	return false;
 }
 
-void gamePlay::goRight(Characters& character, const Board board)
+void gamePlay::go(Characters& player, const int i, const int j)
 {
-	int i = 0, j = 1;
-	character.move(board, i, j);
+	player.move( i, j);
 }
 
-void gamePlay::goLeft(Characters& character, const Board board)
+void gamePlay::endGame()
 {
-	int i = 0, j = -1;
-	character.move(board, i, j);
+	std::cout << "exiting game";
+	exit(EXIT_SUCCESS);
 }
-
-void gamePlay::goUp(Characters& character, const Board board)
-{
-	int i = 1, j = 0;
-	character.move(board, i, j);
-}
-
-void gamePlay::goDown(Characters& character, const Board board)
-{
-	int i = 1, j = 0;
-	character.move(board, i, j);
-}
-
-
-//void gamePlay::end()
-//{
-//	std::cout << "exiting game";
-//	exit(EXIT_SUCCESS);
-//}

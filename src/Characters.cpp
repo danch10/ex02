@@ -1,7 +1,8 @@
 #include "..\include\Characters.h"
-#include "..\include\Characters.h"
 #include "Characters.h"
 #include "Board.h"
+#include "Tiles.h"
+#include "GamePlay.h"
 
 
 
@@ -33,96 +34,144 @@ void Characters::switchCharacter()
 	m_head = m_head->m_next;
 }
 
-void Characters::move(Board board, const int i, const int j)
+void Characters::relocate(const int i, const int j)
 {
-
-	checkValidation(board, m_head->m_x + i, m_head->m_y + j);
-
-	m_head->m_x = m_head->m_x + i;
-	m_head->m_y = m_head->m_y + j;
+	m_head->m_x = i;
+	m_head->m_y = j;
 }
 
-bool Characters::checkValidation(Board board, const int i, const int j)
+void Characters::move(const int i, const int j)
 {
-	bool valid;
 
 	char c;
 	c = board.mapCell(i, j);
 
+
+	if (checkValidation(c)
+	{
+		relocate(m_head->m_x = m_head->m_x + i, m_head->m_y = m_head->m_y + j);
+	}
+}
+
+bool Characters::checkValidation(const char c)
+{
+	bool valid = false;
+
 	switch (m_head->m_c)
 	{
 	case 'K':
-		if ((c == '=') || (c == '*') || (c == '!') || (c == '#'))
+		if (KValidation())
 		{
-			valid = false;
-			break;
-		}
-		else if(c == 'X') 
-		{
-
-			break;
-		}
-		else if ( c == '@')
-		{
-
-			break;
-		}
-		else
-		{
+			relocate();
 			valid = true;
-			break;
 		}
-		
+		break;
 
 	case 'W':
-		if ((c == '=') || (c == '*') || (c == '@') || (c == '#'))
+		if (WValidation())
 		{
-			valid = false;
-			break;
+			relocate();
+			valid = true;
 		}
-		else if (c == 'X')
-		{
-
-			break;
-		}
-		else if (c == '!')
-		{
-
-			break;
-		}
+		break;
 
 	case 'T':
-		if ((c == '=') || (c == '*') || (c == '!') || (c == '@'))
+		if (TValidation())
 		{
-			valid = false;
-			break;
+			relocate();
+			valid = true;
 		}
-		else if (c == 'X')
-		{
+		break;
 
-			break;
-		}
-		else if (c == 'F')
-		{
-			valid = m_key = true;
-
-			break;
-		}
-		else if (c == '#')
-		{
-
-			break;
-		}
 	case 'M':
-		if ((c == '=') || (c == '!') || (c == '#') || (c == '@'))
+		if (TValidation())
 		{
-			valid = false;
-			break;
+			relocate();
+			valid = true;
 		}
-		else if (c == '*')
-		{
-
-			break;
-		}
+		break;
 	}
 }
+
+Board Characters::insertCharacters(Board& board)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		int row = m_head->m_x;
+		int col = m_head->m_y;
+		char c = m_head->m_c;
+
+		board.getStaticMap(c, row, col);
+	}
+
+	return board;
+}
+
+bool Characters::KValidation()
+{
+	if ((c == '=') || (c == '*') || (c == '!') || (c == '#'))
+	{
+		return false;
+	}
+	else if (c == 'X')
+	{
+
+	}
+	else if (c == '@')
+	{
+
+	}
+	else
+	{
+		return true;
+	}
+}
+
+bool Characters::WValidation()
+{
+	if ((c == '=') || (c == '*') || (c == '@') || (c == '#'))
+	{
+		return false;
+	}
+	else if (c == 'X')
+	{
+
+	}
+	else if (c == '!')
+	{
+	
+	}
+}
+
+bool Characters::TingValidation()
+{
+	if ((c == '=') || (c == '*') || (c == '!') || (c == '@'))
+	{
+		return false;
+	}
+	else if (c == 'X')
+	{
+	
+	}
+	else if (c == 'F')
+	{
+	
+	}
+	else if (c == '#')
+	{
+	
+	}
+}
+
+bool Characters::MingValidation()
+{
+	if ((c == '=') || (c == '!') || (c == '#') || (c == '@'))
+	{
+		return false;
+	}
+	else if (c == '*')
+	{
+
+	}
+}
+

@@ -7,12 +7,17 @@ class Board {
 public:
 
 	Board();
-	void clearBoard();
+	/*void clearBoard();*/
+
 	void printMap() const;
-	void buildMap(FileHandler& filefile,
-					Characters character, Tiles tile);
-	void getMap(char c, int x, int y);
+
+	void getStaticMap(char c, int row, int col);
+
 	char mapCell(const int i, const int j);
+
+
+
+
 
 private:
 

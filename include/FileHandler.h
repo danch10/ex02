@@ -24,5 +24,6 @@ public:
 private:
 
 	std::ifstream m_ifs;
+
 };
 

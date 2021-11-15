@@ -1,10 +1,12 @@
 #pragma once
 
+#include <vector>
+
 class Board;
 class Tiles;
 
 #include "Location.h"
-#include <vector>
+
 
 struct Node {
 	Node(const Location& location, char c);
@@ -19,8 +21,6 @@ public:
 	void addCharacter(const Node&);
 
 	void listCharacters(int x, int y, char c);
-
-	void closeList();
 
 	void switchCharacter();
 
@@ -42,9 +42,7 @@ private:
 
 	std::vector<Node> m_characters;
 
-	Node m_head;
-
-	int m_chrNum;
+	int m_chrNum = 0;
 
 	bool m_key = false;
 	bool m_throne = false;

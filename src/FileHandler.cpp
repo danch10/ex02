@@ -15,14 +15,29 @@ bool FileHandler::openFile()
 	   return true;
 	   std::cout << "file is open" << std::endl;
    }
-	   
 }
+
+//------------------------------------------------------------------//
+
+void FileHandler::buildBoard(Board& board, Characters& character, Tiles& tile)
+{
+	board = readBoard();
+
+	character = readCharacters();
+
+	tile = readTiles();
+
+	board = tile.insertTiles(board);
+
+	board = character.insertCharacters(board);
+}
+
+//------------------------------------------------------------------//
 
 Board FileHandler::readBoard()
 {
 	Board staticMap;
 	char c;
-	std::vector<char> temp;
 
 	if (openFile())
 	{
@@ -30,29 +45,31 @@ Board FileHandler::readBoard()
 		{
 			c = m_ifs.get();
 
-			if (c != '\n')
+			if (c == '\n')
 			{
+				staticMap.addRow();
+				continue;
+			}
+
 			if (!(c == '=') && !(c == '@') && !(c == ' '))
-				c = ' ';
-			temp.push_back(c);
-			}
-			else
 			{
-				staticMap.getStaticMap(temp);
-				temp.clear();
-			}
+				c = ' ';
+			}			
+			staticMap.getRow(c);
 		}
 		m_ifs.close();
 	}
 	return staticMap;
 }
 
+//------------------------------------------------------------------//
+
 Characters FileHandler::readCharacters()
 {
 	Characters chr;
 	char c;
 	
-	int i = 0, j = 0;
+	int row = 0, col = 0;
 
 	if (openFile())
 	{
@@ -62,30 +79,30 @@ Characters FileHandler::readCharacters()
 
 			if (c == '\n')
 			{
-				i = 0;
-				j++;
+				col = 0;
+				row++;
 				continue;
 			}
 
-			if (!(c == 'K') && !(c == 'W') && !(c == 'T') && !(c == 'M'))
+			if ((c == 'K') || (c == 'W') || (c == 'T') || (c == 'M'))
 			{
-				chr.listCharacters(c, i, j);
-				i++;
+				chr.listCharacters(row, col, c);
 			}
+			col++;
 		}
 	}
-		chr.closeList();
-
-		m_ifs.close();
+	m_ifs.close();
 	
 	return chr;
 }
+
+//------------------------------------------------------------------//
 
 Tiles FileHandler::readTiles()
 {
 	Tiles tile;
 	char c;
-	int i = 0, j = 0;
+	int row = 0, col = 0;
 
 	if (openFile())
 	{
@@ -95,30 +112,18 @@ Tiles FileHandler::readTiles()
 
 			if (c == '\n')
 			{
-				i = 0;
-				j++;
+				col = 0;
+				row++;
 				continue;
 			}
 
-			if (!(c == 'F') && !(c == '!') && !(c == '#') && !(c == '*') && !(c == 'X'))
+			if ((c == 'F') || (c == '!') || (c == '#') || (c == '*') || (c == 'X'))
 			{
-				tile.getTiles(c, i, j);
+				tile.getTiles(row, col, c);
 			}
+			col++;
 		}		
 		m_ifs.close();
 	}	
 	return tile;
-}
-
-void FileHandler::buildBoard(Board& board, Characters& character, Tiles& tile)
-{
-		board = readBoard();
-
-		character = readCharacters();
-
-		tile = readTiles();
-
-		board = tile.insertTiles(board);
-
-		board = character.insertCharacters(board);
 }

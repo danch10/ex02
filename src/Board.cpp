@@ -4,33 +4,48 @@
 #include "Tiles.h"
 #include "io.h"
 
-Board::Board()
-{
-	for (int i = 0; i < 10 ; i++)
-	{
-		std::vector<char> temp;
-
-		for (int j = 0; j < 10 ; j++)
-			temp.push_back(' ');
-
-		m_map.push_back(temp);
-	}
-}
 
 void Board::clearMap()
 {
 	m_map.clear();
 }
 
-void Board::getStaticMap(std::vector<char>& row)
+//------------------------------------------------------------------//
+
+void Board::addRow()
 {
-	m_map.push_back(row);
+	m_map.push_back(m_row);
+
+	m_row.clear();
 }
+
+bool Board::mapBoarders(const Location& location) const
+{
+	bool valid;
+
+	if (!((location.row >= 0) && 
+		
+		(location.row < (m_map.size() ))) ||
+
+		!((location.col >= 0) &&
+		
+		(location.col < (m_map[0].size()) )) )
+		
+		valid = false;
+	else
+		valid = true;
+
+	return valid;
+}
+
+//------------------------------------------------------------------//
 
 void Board::dinamicCell(const char c, const int row, const int col)
 {
 	m_map[row][col] = c;
 }
+
+//------------------------------------------------------------------//
 
 void Board::upDateBoard(Characters& character, Tiles& tile)
 {
@@ -45,13 +60,15 @@ void Board::upDateBoard(Characters& character, Tiles& tile)
 	}
 }
 
+//------------------------------------------------------------------//
+
 void Board::printMap() const
 {
 	int i, j;
 
 	for (i = 0; i < m_map.size() ; i++)
 	{
-		for (j = 0; j < m_map.size() ; j++)
+		for (j = 0; j < m_map[i].size() ; j++)
 
 		std::cout << m_map[i][j]; 
 
@@ -61,7 +78,14 @@ void Board::printMap() const
 	std::cout << "====================================="<< std::endl;
 }
 
+//------------------------------------------------------------------//
 
+void Board::getRow(const char c)
+{
+	m_row.push_back(c);
+}
+
+//------------------------------------------------------------------//
 
 char Board::mapCell(const int i, const int j) const
 {

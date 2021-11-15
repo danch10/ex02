@@ -43,23 +43,12 @@ Board Characters::insertCharacters(Board& board)
 
 //------------------------------------------------------------------//
 
-void Characters::closeList()
-{
-	m_chrNum = 0;
-
-	m_head = m_characters[m_chrNum];
-}
-
-//------------------------------------------------------------------//
-
 void Characters::switchCharacter()
 {
-	if (m_chrNum != (m_characters.size() - 1))
+	if (m_chrNum != (m_characters.size()-1))
 		m_chrNum++;
 	else
 		m_chrNum = 0;
-
-	m_head = m_characters[m_chrNum];
 }
 
 //------------------------------------------------------------------//
@@ -68,12 +57,12 @@ Location Characters::teleport(const Tiles& tile)
 {
 	char c = 'X';
 
-	int row = m_head.m_location.row;
-	int col = m_head.m_location.col;
+	int row = m_characters[m_chrNum].m_location.row;
+	int col = m_characters[m_chrNum].m_location.col;
 
-	m_head.m_location = tile.teleportDes(row, col);
+	m_characters[m_chrNum].m_location = tile.teleportDes(row, col);
 
-	return m_head.m_location;
+	return m_characters[m_chrNum].m_location;
 }
 
 //------------------------------------------------------------------//
@@ -82,15 +71,20 @@ void Characters::move(const Board& map, const int i, const int j)
 {
 	char c;
 
-	int row = m_head.m_location.row + i;
-	int col = m_head.m_location.col + j;
+	int row = m_characters[m_chrNum].m_location.row + i;
+	int col = m_characters[m_chrNum].m_location.col + j;
 
-	c = map.mapCell(row, col);
+	Location location(row, col);
 
-	if (checkValidation(c))
+	if (map.mapBoarders(location))
 	{
-		m_head.m_location.row = m_head.m_location.row + i;
-		m_head.m_location.col = m_head.m_location.col + j;
+		c = map.mapCell(row, col);
+
+		if (checkValidation(c))
+		{
+			m_characters[m_chrNum].m_location.row = m_characters[m_chrNum].m_location.row + i;
+			m_characters[m_chrNum].m_location.col = m_characters[m_chrNum].m_location.col + j;
+		}
 	}
 }
 
@@ -98,8 +92,8 @@ void Characters::move(const Board& map, const int i, const int j)
 
 Location Characters::characterLocation()
 {
-	int row = m_head.m_location.row;
-	int col = m_head.m_location.col;
+	int row = m_characters[m_chrNum].m_location.row;
+	int col = m_characters[m_chrNum].m_location.col;
 
 	Location locate(row, col);
 
@@ -119,7 +113,7 @@ bool Characters::checkValidation(const char c)
 {
 	bool valid = false;
 
-	switch (m_head.m_c)
+	switch (m_characters[m_chrNum].m_c)
 	{
 	case 'K':
 		if ((c == ' ') || (c == '@') || (c == 'X') || (c == 'F'))
@@ -165,7 +159,7 @@ bool Characters::checkValidation(const char c)
 
 void Characters::reAct(const char& c, Tiles& tile)
 {
-	switch (m_head.m_c)
+	switch (m_characters[m_chrNum].m_c)
 	{
 	case 'K':
 		if (c == '@')
@@ -184,11 +178,11 @@ void Characters::reAct(const char& c, Tiles& tile)
 		if (c == '!')
 		{
 			int cell;
-			cell = tile.getCellNum(c, m_head.m_location);
+			cell = tile.getCellNum(c, m_characters[m_chrNum].m_location);
 			tile.clearTile(cell);
-			int row = m_head.m_location.row;
-			int col = m_head.m_location.col;
-			char newTile = 'W';
+			int row = m_characters[m_chrNum].m_location.row;
+			int col = m_characters[m_chrNum].m_location.col;
+			char newTile = 'F';
 			tile.getTiles(row, col, newTile);
 		}
 		else if (c == 'X')
@@ -201,14 +195,14 @@ void Characters::reAct(const char& c, Tiles& tile)
 		if (c == '#')
 		{
 			int cell;
-			cell = tile.getCellNum(c, m_head.m_location);
+			cell = tile.getCellNum(c, m_characters[m_chrNum].m_location);
 			tile.clearTile(cell);
 		}
 		else if (c == 'F')
 		{
 			m_key = true;
 			int cell;
-			cell = tile.getCellNum(c, m_head.m_location);
+			cell = tile.getCellNum(c, m_characters[m_chrNum].m_location);
 			tile.clearTile(cell);
 		}
 		else if (c == 'X')
@@ -221,7 +215,7 @@ void Characters::reAct(const char& c, Tiles& tile)
 		if (c == '*')
 		{
 			int cell;
-			cell = tile.getCellNum(c, m_head.m_location);
+			cell = tile.getCellNum(c, m_characters[m_chrNum].m_location);
 			tile.clearTile(cell);
 		}
 		break;

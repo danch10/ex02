@@ -16,18 +16,18 @@ enum Keys
 
 enum SpecialKeys
 {
-	KB_Up = 72,
-	KB_Down = 80,
+	KB_Up = 80,
+	KB_Down = 72,
 	KB_Left = 75,
 	KB_Right = 77,
 };
 
 void GamePlay::start()
 {
-	FileHandler file;
-	Board board;
+	FileHandler file ;
+	Board board ;
+	Tiles tile ;
 	Characters character;
-	Tiles tile;
 
 	for (int level = 1; level <= 3; level++)
 	{
@@ -53,6 +53,8 @@ void GamePlay::start()
 		}
 	}
 }
+
+//------------------------------------------------------------------//
 
 void GamePlay::startPlay(Characters& chr, const Board& b)
 {
@@ -103,17 +105,18 @@ void GamePlay::startPlay(Characters& chr, const Board& b)
 			endGame();
 			validPlay = true;
 
-		default:
-			std::cout << "press a valid key to move\n";
-			break;
 		}
 	}
 }
+
+//------------------------------------------------------------------//
 
 void GamePlay::clearBoard()
 {
 	system("cls");
 }
+
+//------------------------------------------------------------------//
 
 void GamePlay::endGame()
 {

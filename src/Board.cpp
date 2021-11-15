@@ -1,5 +1,4 @@
 #include <iostream>
-#include "macros.h"
 #include "Board.h"
 #include "Characters.h"
 #include "Tiles.h"
@@ -7,11 +6,11 @@
 
 Board::Board()
 {
-	for (int i = 0; i < MAX_ROW; i++)
+	for (int i = 0; i < 10 ; i++)
 	{
 		std::vector<char> temp;
 
-		for (int j = 0; j < MAX_COL; j++)
+		for (int j = 0; j < 10 ; j++)
 			temp.push_back(' ');
 
 		m_map.push_back(temp);
@@ -35,8 +34,8 @@ void Board::dinamicCell(const char c, const int row, const int col)
 
 void Board::upDateBoard(Characters& character, Tiles& tile)
 {
-	int row = character.characterLocation(character).row;
-	int col = character.characterLocation(character).col;
+	int row = character.characterLocation().row;
+	int col = character.characterLocation().col;
 		
 	char c = m_map[row][col];
 

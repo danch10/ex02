@@ -4,80 +4,122 @@
 #include "GamePlay.h"
 #include "Location.h"
 
-Node::Node(const Location& location, char c, Node* next)
-	:m_location(location), m_c(c), m_next(next) {}
+Node::Node(const Location& location, char c)
+	:m_location(location), m_c(c) {}
+
+//------------------------------------------------------------------//
 
 void Characters::listCharacters(int x, int y, char c)
 {
 	Location loc(x, y);
 
-	m_head = new Node(loc, c, m_head);
+	 Node newCharacter(loc, c);
 
-	if (m_head->m_next == NULL)
-		m_tail = m_head;
+	 addCharacter(newCharacter);
 }
+
+//------------------------------------------------------------------//
+
+void Characters::addCharacter(const Node& chr)
+{
+	m_characters.push_back(chr);
+}
+
+//------------------------------------------------------------------//
 
 Board Characters::insertCharacters(Board& board)
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < m_characters.size() ; i++)
 	{
-		int row = m_head->m_location.row;
-		int col = m_head->m_location.col;
+		int row = m_characters[i].m_location.row;
+		int col = m_characters[i].m_location.col;
 
-		char c = m_head->m_c;
+		char c = m_characters[i].m_c;
 
 		board.dinamicCell(c, row, col);
-
-		m_head = m_head->m_next;
 	}
-
 	return board;
 }
 
-Location Characters::teleport(const Tiles& tile)
-{
-
-	char c = 'X';
-
-	int row = m_head->m_location.row ;
-	int col = m_head->m_location.col ;
-
-	m_head->m_location = tile.teleportDes(row, col);
-
-	return m_head->m_location;
-}
+//------------------------------------------------------------------//
 
 void Characters::closeList()
 {
-	m_tail->m_next = m_head;
+	m_chrNum = 0;
+
+	m_head = m_characters[m_chrNum];
 }
+
+//------------------------------------------------------------------//
 
 void Characters::switchCharacter()
 {
-	m_head = m_head->m_next;
+	if (m_chrNum != (m_characters.size() - 1))
+		m_chrNum++;
+	else
+		m_chrNum = 0;
+
+	m_head = m_characters[m_chrNum];
 }
+
+//------------------------------------------------------------------//
+
+Location Characters::teleport(const Tiles& tile)
+{
+	char c = 'X';
+
+	int row = m_head.m_location.row;
+	int col = m_head.m_location.col;
+
+	m_head.m_location = tile.teleportDes(row, col);
+
+	return m_head.m_location;
+}
+
+//------------------------------------------------------------------//
 
 void Characters::move(const Board& map, const int i, const int j)
 {
 	char c;
 
-	int row = m_head->m_location.row + i;
-	int col = m_head->m_location.col + j;
+	int row = m_head.m_location.row + i;
+	int col = m_head.m_location.col + j;
 
 	c = map.mapCell(row, col);
 
 	if (checkValidation(c))
 	{
-		m_head->m_location.row = m_head->m_location.row + i;
-		m_head->m_location.col = m_head->m_location.col + j;
+		m_head.m_location.row = m_head.m_location.row + i;
+		m_head.m_location.col = m_head.m_location.col + j;
 	}
 }
+
+//------------------------------------------------------------------//
+
+Location Characters::characterLocation()
+{
+	int row = m_head.m_location.row;
+	int col = m_head.m_location.col;
+
+	Location locate(row, col);
+
+	return locate;
+}
+
+//------------------------------------------------------------------//
+
+bool Characters::kingWon()
+{
+	return m_throne;
+}
+
+//------------------------------------------------------------------//
 
 bool Characters::checkValidation(const char c)
 {
 	bool valid = false;
 
-	switch (m_head->m_c)
+	switch (m_head.m_c)
 	{
 	case 'K':
 		if ((c == ' ') || (c == '@') || (c == 'X') || (c == 'F'))
@@ -119,14 +161,11 @@ bool Characters::checkValidation(const char c)
 	return valid;
 }
 
-bool Characters::kingWon()
-{
-	return m_throne;
-}
+//------------------------------------------------------------------//
 
 void Characters::reAct(const char& c, Tiles& tile)
 {
-	switch (m_head->m_c)
+	switch (m_head.m_c)
 	{
 	case 'K':
 		if (c == '@')
@@ -145,10 +184,10 @@ void Characters::reAct(const char& c, Tiles& tile)
 		if (c == '!')
 		{
 			int cell;
-			cell = tile.getCellNum(c, m_head->m_location);
+			cell = tile.getCellNum(c, m_head.m_location);
 			tile.clearTile(cell);
-			int row = m_head->m_location.row;
-			int col = m_head->m_location.col;
+			int row = m_head.m_location.row;
+			int col = m_head.m_location.col;
 			char newTile = 'W';
 			tile.getTiles(row, col, newTile);
 		}
@@ -162,14 +201,14 @@ void Characters::reAct(const char& c, Tiles& tile)
 		if (c == '#')
 		{
 			int cell;
-			cell = tile.getCellNum(c, m_head->m_location);
+			cell = tile.getCellNum(c, m_head.m_location);
 			tile.clearTile(cell);
 		}
 		else if (c == 'F')
 		{
 			m_key = true;
 			int cell;
-			cell = tile.getCellNum(c, m_head->m_location);
+			cell = tile.getCellNum(c, m_head.m_location);
 			tile.clearTile(cell);
 		}
 		else if (c == 'X')
@@ -182,19 +221,9 @@ void Characters::reAct(const char& c, Tiles& tile)
 		if (c == '*')
 		{
 			int cell;
-			cell = tile.getCellNum(c, m_head->m_location);
+			cell = tile.getCellNum(c, m_head.m_location);
 			tile.clearTile(cell);
 		}
 		break;
 	}
-}
-
-Location Characters::characterLocation(Characters& character)
-{
-	int row = m_head->m_location.row;
-	int col = m_head->m_location.col;
-
-	Location locate(row, col);
-
-	return locate;
 }

@@ -52,7 +52,6 @@ void GamePlay::start()
 			clearBoard();
 		}
 	}
-	return;
 }
 
 void GamePlay::startPlay(Characters& chr, const Board& b)

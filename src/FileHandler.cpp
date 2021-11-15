@@ -1,5 +1,4 @@
 #include <iostream>
-#include "macros.h"
 #include "FileHandler.h"
 #include "Board.h"
 #include "Characters.h"
@@ -33,7 +32,7 @@ Board FileHandler::readBoard()
 
 			if (c != '\n')
 			{
-			if (!(c == '=') && !(c == '@') && !(c == ' ') && !(c == 'X'))
+			if (!(c == '=') && !(c == '@') && !(c == ' '))
 				c = ' ';
 			temp.push_back(c);
 			}
@@ -51,8 +50,8 @@ Board FileHandler::readBoard()
 Characters FileHandler::readCharacters()
 {
 	Characters chr;
-	bool firstCharacter = true;
 	char c;
+	
 	int i = 0, j = 0;
 
 	if (openFile())
@@ -101,7 +100,7 @@ Tiles FileHandler::readTiles()
 				continue;
 			}
 
-			if (!(c == 'F') && !(c == '!') && !(c == '#') && !(c == '*'))
+			if (!(c == 'F') && !(c == '!') && !(c == '#') && !(c == '*') && !(c == 'X'))
 			{
 				tile.getTiles(c, i, j);
 			}

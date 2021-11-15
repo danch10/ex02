@@ -3,16 +3,12 @@
 #include <cstdlib>
 
 #include "GamePlay.h"
-#include "FileHandler.h"
-#include "Board.h"
-
 
 int main()
 {
-	gamePlay play;
+	GamePlay play;
 
 	play.start();
-
 
 	return EXIT_SUCCESS;
 }

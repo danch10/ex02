@@ -1,6 +1,7 @@
 #pragma once
 
 #include <fstream>
+
 class Board;
 class Characters;
 class Tiles;
@@ -12,10 +13,12 @@ public:
 
 	bool openFile();
 
-	void readFromFile();
+	void buildBoard(Board& board, Characters& character, Tiles& tile);
 
 	Board readBoard();
+
 	Characters readCharacters();
+	
 	Tiles readTiles();
 
 private:

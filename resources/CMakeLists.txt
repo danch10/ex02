@@ -1,1 +1,1 @@
-﻿configure_file("save_the_king.txt" ${ CMAKE_BINARY_DIR } COPYONLY)
+﻿configure_file ("save_the_king.txt" ${CMAKE_BINARY_DIR} COPYONLY)

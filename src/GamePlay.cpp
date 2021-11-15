@@ -6,6 +6,7 @@
 #include "Board.h"
 #include "Characters.h"
 #include "Tiles.h"
+#include "Location.h"
 
 enum Keys
 {
@@ -21,55 +22,46 @@ enum SpecialKeys
 	KB_Right = 77,
 };
 
-void gamePlay::start()
+void GamePlay::start()
 {
 	FileHandler file;
 	Board board;
 	Characters character;
 	Tiles tile;
 
-	for(int level = 1 ; level <= 3 ; level++ )
-
-	while (1)
+	for (int level = 1; level <= 3; level++)
 	{
-		buildBoard(file, board, character, tile);
+		file.buildBoard(board, character, tile);
 
-		startPlay(character);
+		while (!character.kingWon())
+		{
+			board.printMap();
 
-		/*checkPlay();*/
+			startPlay(character, board);
 
+			board.clearMap();
 
+			board = file.readBoard();
+
+			board = tile.insertTiles(board);
+
+			board.upDateBoard(character, tile);
+
+			board = character.insertCharacters(board);
+			
+			clearBoard();
+		}
 	}
-
+	return;
 }
 
-void gamePlay::buildBoard(FileHandler& file, Board& board, Characters& character, Tiles& tile)
-{	
-	if(file.openFile())
-	{
-		board = file.readBoard();
-		
-		character = file.readCharacters();
-
-		tile = file.readTiles();
-
-		board = tile.insertTiles(board);
-
-		board = character.insertCharacters(board);
-
-		board.printMap();
-	}
-}
-
-
-void gamePlay::startPlay( Characters& chr)
+void GamePlay::startPlay(Characters& chr, const Board& b)
 {
-	bool validMove = false;
+	bool validPlay = false;
 	int row ;
 	int col ;
 
-
-	while (!validMove)
+	while (!validPlay)
 	{
 		auto c = _getch();
 
@@ -78,33 +70,39 @@ void gamePlay::startPlay( Characters& chr)
 		case KB_Up:
 			row = 1;
 			col = 0;
-			go(chr, row, col);
+			chr.move(b, row, col);
+			validPlay = true;
 			break;
 
 		case KB_Down:
 			row = -1;
 			col = 0;
-			go(chr, row, col);
+			chr.move(b, row, col);
+			validPlay = true;
 			break;
 
 		case KB_Left:
 			row = 0;
 			col = -1;
-			go(chr, row, col);
+			chr.move(b, row, col);
+			validPlay = true;
 			break;
 
 		case KB_Right:
 			row = 0;
 			col = 1;
-			go(chr, row, col);
+			chr.move(b, row, col);
+			validPlay = true;
 			break;
 
 		case 'p':
 			chr.switchCharacter();
+			validPlay = true;
 			break;
 		
 		case KB_Escape:
 			endGame();
+			validPlay = true;
 
 		default:
 			std::cout << "press a valid key to move\n";
@@ -113,17 +111,12 @@ void gamePlay::startPlay( Characters& chr)
 	}
 }
 
-bool gamePlay::gameOver() const
+void GamePlay::clearBoard()
 {
-	return false;
+	system("cls");
 }
 
-void gamePlay::go(Characters& player, const int i, const int j)
-{
-	player.move( i, j);
-}
-
-void gamePlay::endGame()
+void GamePlay::endGame()
 {
 	std::cout << "exiting game";
 	exit(EXIT_SUCCESS);

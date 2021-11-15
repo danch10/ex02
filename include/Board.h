@@ -1,26 +1,29 @@
 #pragma once
 #include <vector>
 
+#include "Location.h"
+class Characters;
+class Tiles;
 
 class Board {
 
 public:
 
 	Board();
-	/*void clearBoard();*/
+
+	void clearMap();
+
+	void upDateBoard(Characters& character, Tiles& tile);
 
 	void printMap() const;
 
-	void getStaticMap(char c, int row, int col);
+	void getStaticMap(std::vector<char>& );
 
-	char mapCell(const int i, const int j);
+	void dinamicCell(const char, const int, const int);
 
-
-
-
+	char mapCell(const int i, const int j) const;
 
 private:
 
 	std::vector<std::vector<char>> m_map;
-
 };

@@ -10,38 +10,41 @@ bool FileHandler::openFile()
    m_ifs.open("save_the_king.txt", std::ifstream::in);
     
    if (!m_ifs.is_open())
-   {
 	   return false;
-   }
    else
-
+   {
 	   return true;
+	   std::cout << "file is open" << std::endl;
+   }
+	   
 }
-
-void FileHandler::readFromFile()
-{
-	
-}
-//m_ifs.good()
 
 Board FileHandler::readBoard()
 {
 	Board staticMap;
 	char c;
+	std::vector<char> temp;
 
-	for (int i = 0; i < MAX_ROW; i++)
+	if (openFile())
 	{
-		for (int j = 0; j < MAX_COL; j++)
+		while(m_ifs.good())
 		{
-				c = m_ifs.get();
+			c = m_ifs.get();
 
-				if (!(c == '=') && !(c == '@') && !(c == ' ') && !(c == 'X'))
-					c = ' ';
-
-			staticMap.getStaticMap(c, i, j);
+			if (c != '\n')
+			{
+			if (!(c == '=') && !(c == '@') && !(c == ' ') && !(c == 'X'))
+				c = ' ';
+			temp.push_back(c);
+			}
+			else
+			{
+				staticMap.getStaticMap(temp);
+				temp.clear();
+			}
 		}
+		m_ifs.close();
 	}
-	
 	return staticMap;
 }
 
@@ -50,26 +53,32 @@ Characters FileHandler::readCharacters()
 	Characters chr;
 	bool firstCharacter = true;
 	char c;
+	int i = 0, j = 0;
 
-	for (int i = 0; i < MAX_ROW; i++)
+	if (openFile())
 	{
-		for (int j = 0; j < MAX_COL; j++)
+		while (m_ifs.good())
 		{
 			c = m_ifs.get();
 
-			if (!(c == 'K') && !(c == 'W') && !(c == 'T') && !(c == 'M'))
-				continue;
-
-			if (firstCharacter)
+			if (c == '\n')
 			{
-				chr.getFirst(c, i, j);
+				i = 0;
+				j++;
+				continue;
 			}
 
-			chr.listCharacters(c, i, j);
+			if (!(c == 'K') && !(c == 'W') && !(c == 'T') && !(c == 'M'))
+			{
+				chr.listCharacters(c, i, j);
+				i++;
+			}
 		}
 	}
-	chr.closeList();
+		chr.closeList();
 
+		m_ifs.close();
+	
 	return chr;
 }
 
@@ -77,18 +86,40 @@ Tiles FileHandler::readTiles()
 {
 	Tiles tile;
 	char c;
+	int i = 0, j = 0;
 
-	for (int i = 0; i < MAX_ROW; i++)
+	if (openFile())
 	{
-		for (int j = 0; j < MAX_COL; j++)
+		while ( m_ifs.good())
 		{
 			c = m_ifs.get();
 
-			if (!(c == 'F') && !(c == '!') && !(c == '#') && !(c == '*'))
+			if (c == '\n')
+			{
+				i = 0;
+				j++;
 				continue;
+			}
 
-			tile.getTiles(c, i, j);
-		}
-	}
+			if (!(c == 'F') && !(c == '!') && !(c == '#') && !(c == '*'))
+			{
+				tile.getTiles(c, i, j);
+			}
+		}		
+		m_ifs.close();
+	}	
 	return tile;
+}
+
+void FileHandler::buildBoard(Board& board, Characters& character, Tiles& tile)
+{
+		board = readBoard();
+
+		character = readCharacters();
+
+		tile = readTiles();
+
+		board = tile.insertTiles(board);
+
+		board = character.insertCharacters(board);
 }

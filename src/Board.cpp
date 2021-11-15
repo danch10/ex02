@@ -3,6 +3,7 @@
 #include "Board.h"
 #include "Characters.h"
 #include "Tiles.h"
+#include "io.h"
 
 Board::Board()
 {
@@ -17,9 +18,32 @@ Board::Board()
 	}
 }
 
-void Board::getStaticMap(char c, int row, int col)
+void Board::clearMap()
+{
+	m_map.clear();
+}
+
+void Board::getStaticMap(std::vector<char>& row)
+{
+	m_map.push_back(row);
+}
+
+void Board::dinamicCell(const char c, const int row, const int col)
 {
 	m_map[row][col] = c;
+}
+
+void Board::upDateBoard(Characters& character, Tiles& tile)
+{
+	int row = character.characterLocation(character).row;
+	int col = character.characterLocation(character).col;
+		
+	char c = m_map[row][col];
+
+	if (c != ' ')
+	{
+		character.reAct(c, tile);
+	}
 }
 
 void Board::printMap() const
@@ -40,17 +64,11 @@ void Board::printMap() const
 
 
 
-//char Board::mapCell(const int i, const int j)
-//{
-//	char c;
-//
-//	c = m_map[i][j];
-//
-//	return c;
-//}
+char Board::mapCell(const int i, const int j) const
+{
+	char c;
 
-//
-//void Board::clearBoard()
-//{
-//
-//}
+	c = m_map[i][j];
+
+	return c;
+}
